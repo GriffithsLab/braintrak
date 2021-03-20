@@ -4,9 +4,9 @@ function import_raw_eeg
 	% It then performs Fourier transforms and artifact rejection, and then 
 	% writes the output to psg_data/sleep_tfs
 
-	os_prefix = './edf_data/';
+	os_prefix = './psg_data/';
 
-	data_set = 'edf';
+	data_set = 'unresponsive';
 	idx = 1;
 
 	for j = idx
@@ -14,11 +14,11 @@ function import_raw_eeg
 	end
 
 function import(os_prefix,data_set,k)
-	infile = fullfile(os_prefix,sprintf('%s_%d',data_set,k),sprintf('%s_%d.mat',data_set,k));
+	infile = fullfile(os_prefix,'psgs',data_set,sprintf('%s_%d',data_set,k),sprintf('%s_%d.mat',data_set,k));
 	fprintf('Loading: %s\n',infile);
 	fhandle = load(infile);
 	colheaders = fhandle.colheaders;
-	for j = 1:1
+	for j = 1:length(colheaders)
 		fprintf('%s_%d: %s electrode\n',data_set,k,colheaders{j});
 		[t,f,s(:,:,j),nspec(:,j),n_reject(j)] = bt.data.get_tfs(fhandle.t(:),fhandle.data(:,j),30);
 	end
