@@ -9,7 +9,7 @@ function [tv,fv,spectra,nspec,nreject] = get_tfs(t,V,window_length,fft_length,re
 			fft_length = 4;
 		end
 
-		if nargin < 3 || isempty(window_length)
+		if nargin < 3 || isempty(window_length) % in seconds
 			window_length = 30;
 		end
 

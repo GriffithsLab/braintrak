@@ -12,3 +12,8 @@
 *.out
 *.synctex.gz
 *.toc
+
+# Ignore edf files
+*.edf
+edf_data/
+
