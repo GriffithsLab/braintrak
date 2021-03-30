@@ -31,21 +31,25 @@ function import(data_set)
 	states_available = {'W','5','1','2','3','4'};
 	state_color_index = [2 3 4 5 6 6]; % Indexes for cdata
 
-	for j = 1:length(t)
-		if mod(j-1,30) == 0 % This is on a 30s block
-			state_str{j} = int2str(fhandle.epoch_score{(j-1)/30+1});
-			dominant_state = fhandle.epoch_score{(j-1)/30+1};
-        else
-			state_str{j} = sprintf('%s-%s (%d/%d)',fhandle.epoch_score{floor((j-1)/30)+1},fhandle.epoch_score{ceil((j-1)/30)+1},30-mod(j-1,30),mod(j-1,30));
-			if 30-mod(j-1,30) > mod(j-1,30) % The dominant state is whichever one contributed more (time-wise)
-				dominant_state = fhandle.epoch_score{floor((j-1)/30)+1};
-			else
-				dominant_state = fhandle.epoch_score{ceil((j-1)/30)+1};
-			end
-		end
-		state_score(j) = state_color_index(strcmp(dominant_state,states_available));
-	end
-	outfile = fullfile(os_prefix,'sleep_tfs',sprintf('%s_%d_hf_tfs.mat',data_set,k));
+    state_str = cell(length(t),1);
+    [state_str{:}] = deal('edf_x'); 
+    state_score = fhandle.epoch_score;
+    
+% 	for j = 1:length(t)
+% 		if mod(j-1,30) == 0 % This is on a 30s block
+% 			state_str{j} = int2str(fhandle.epoch_score{(j-1)/30+1});
+% 			dominant_state = fhandle.epoch_score{(j-1)/30+1};
+%         else
+% 			state_str{j} = sprintf('%s-%s (%d/%d)',fhandle.epoch_score{floor((j-1)/30)+1},fhandle.epoch_score{ceil((j-1)/30)+1},30-mod(j-1,30),mod(j-1,30));
+% 			if 30-mod(j-1,30) > mod(j-1,30) % The dominant state is whichever one contributed more (time-wise)
+% 				dominant_state = fhandle.epoch_score{floor((j-1)/30)+1};
+% 			else
+% 				dominant_state = fhandle.epoch_score{ceil((j-1)/30)+1};
+% 			end
+% 		end
+% 		state_score(j) = state_color_index(strcmp(dominant_state,states_available));
+% 	end
+	outfile = fullfile('/home/taha/git/sleepmod/braintrak/edf_data/sleep_tfs');
 	fprintf('Saving: %s\n',outfile);
 	save(outfile,'t','f','s','state_score','state_str','nspec','n_reject','colheaders')
 	fprintf('Done\n\n')
