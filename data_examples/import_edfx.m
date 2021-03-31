@@ -3,20 +3,22 @@ function import_raw_eeg
 	% e.g. psg_data\psgs\control_apnea\control_apnea_9\control_apnea_9.mat
 	% It then performs Fourier transforms and artifact rejection, and then 
 	% writes the output to psg_data/sleep_tfs
+    edfmat = '~/git/sleepmod/braintrak/edf_data/edf_1/edf_1.mat';           % Change this
+    
     
 	idx = 1;
 
 	for j = idx
-		import('~/git/sleepmod/braintrak/edf_data/edf_1/edf_1.mat');
+		import(edfmat);
 	end
 
 function import(data_set)
-	infile = fullfile(data_set);   %(os_prefix,sprintf('%s_%d',data_set,k),sprintf('%s_%d.mat',data_set,k));
+	infile = fullfile(data_set);  
 	fprintf('Loading: %s\n',infile);
 	fhandle = load(infile);
 	colheaders = fhandle.colheaders;
     % fprintf('%s_%d: %s electrode\n',data_set,k,colheaders);
-	[t,f,s,nspec,n_reject] = get_tfs(fhandle.t,fhandle.data,30,4,false);
+	[t,f,s,nspec,n_reject] = get_tfs(fhandle.t,fhandle.data,30,4,true);
 
 
 	t_max_retain = floor(length(t)/30)*30;
@@ -49,7 +51,7 @@ function import(data_set)
 % 		end
 % 		state_score(j) = state_color_index(strcmp(dominant_state,states_available));
 % 	end
-	outfile = fullfile('/home/taha/git/sleepmod/braintrak/edf_data/sleep_tfs');
+	outfile = fullfile('./edf_data/sleep_tfs'); 
 	fprintf('Saving: %s\n',outfile);
 	save(outfile,'t','f','s','state_score','state_str','nspec','n_reject','colheaders')
 	fprintf('Done\n\n')
@@ -157,7 +159,7 @@ function [tv,fv,spectra,nspec,nreject] = get_tfs(t,V,window_length,fft_length,re
 			clean = clean_clipping & clean_range & clean_runs;
 			
 		else
-			clean = true(size(delta_pow));
+			clean = true(size(v_std));
 		end
 
 		% Now do the calculations for the 30 second spectra
