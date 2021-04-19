@@ -3,7 +3,7 @@ function import_raw_eeg
 	% e.g. psg_data\psgs\control_apnea\control_apnea_9\control_apnea_9.mat
 	% It then performs Fourier transforms and artifact rejection, and then 
 	% writes the output to psg_data/sleep_tfs
-    edfmat = '~/git/sleepmod/braintrak/edf_data/edf_1/edf_1.mat';           % Change this
+    edfmat = 'C:\Users\taham\OneDrive\Documents\git\sleepmod\braintrak\edf_data\edf_data\edf_1\edf_1.mat';           % Change this
     
     
 	idx = 1;
@@ -18,7 +18,7 @@ function import(data_set)
 	fhandle = load(infile);
 	colheaders = fhandle.colheaders;
     % fprintf('%s_%d: %s electrode\n',data_set,k,colheaders);
-	[t,f,s,nspec,n_reject] = get_tfs(fhandle.t,fhandle.data,30,4,true);
+	[t,f,s,nspec,n_reject] = get_tfs(fhandle.t,fhandle.data,30,4,false);
 
 
 	t_max_retain = floor(length(t)/30)*30;
